@@ -23,6 +23,7 @@ jest.mock("../db", () => ({
 }));
 
 describe("Author Service Tests", () => {
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -129,6 +130,23 @@ describe("Author Service Tests", () => {
     await expect(deleteAuthor(1)).rejects.toThrow("Failed to delete author");
   });
 
+  [
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Doe" },
+  ].forEach(({ id, name }) => {
+    it(`should get an author with name ${name}`, async () => {
+      const mockAuthor = { id: id, name: name };
+      jest.spyOn(db.author, "findUnique").mockResolvedValue(mockAuthor);
+
+      const result = await getAuthor(id);
+
+      expect(result).toEqual(mockAuthor);
+      expect(db.author.findUnique).toHaveBeenCalledWith({
+        where: { id: id },
+      });
+    });
+  });
+
   testData.forEach(({ id, name }) => {
     it(`should create an author with name ${name}`, async () => {
       const mockAuthor = { id: id, name: name };
@@ -141,5 +159,14 @@ describe("Author Service Tests", () => {
         data: { name: name },
       });
     });
+  });
+
+  it("should handle case when getAuthor returns nothing", async () => {
+    jest.spyOn(db.author, "findUnique").mockResolvedValue(null);
+
+    const result = await getAuthor(1);
+
+    expect(result).toBeNull();
+    expect(db.author.findUnique).toHaveBeenCalledWith({ where: { id: 1 } });
   });
 });
