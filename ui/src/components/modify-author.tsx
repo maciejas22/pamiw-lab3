@@ -3,6 +3,7 @@ import { Modal, Button, TextInput, Space } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconPencil } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
+import { updateAuthor } from "../controllers/author";
 
 export function ModifyAuthor({
   id,
@@ -31,21 +32,7 @@ export function ModifyAuthor({
         loading: true,
       });
 
-      const response = await fetch(
-        `http://${import.meta.env.VITE_API_HOST}:${
-          import.meta.env.VITE_API_PORT
-        }/authors`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id,
-            ...values,
-          }),
-        }
-      );
+      const response = await updateAuthor(id, values);
       notifications.clean();
 
       if (!response.ok) {

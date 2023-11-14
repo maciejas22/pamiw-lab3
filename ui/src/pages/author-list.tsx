@@ -2,23 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Center, Group, Space, Table } from "@mantine/core";
 
 import { IAuthor } from "../types";
-import { links } from "../routes/api-routes";
 import { CreateAuthor } from "../components/create-author";
 import { DeleteAuthor } from "../components/delete-author";
 import { ModifyAuthor } from "../components/modify-author";
-
-const fetchAuthors = async () => {
-  const response = await fetch(
-    `http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}${
-      links.getAuthors
-    }`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch authors");
-  }
-  const data = await response.json();
-  return data;
-};
+import { fetchAuthors } from "../controllers/author";
 
 export function AuthorList() {
   const { data, error, isLoading, refetch } = useQuery<IAuthor[]>({

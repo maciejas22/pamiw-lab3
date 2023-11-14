@@ -2,6 +2,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Space, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
+import { createAuthor } from "../controllers/author";
 
 export function CreateAuthor({ refetch }: any) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -23,18 +24,7 @@ export function CreateAuthor({ refetch }: any) {
         loading: true,
       });
 
-      const response = await fetch(
-        `http://${import.meta.env.VITE_API_HOST}:${
-          import.meta.env.VITE_API_PORT
-        }/authors`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        }
-      );
+      const response = await createAuthor(values);
       notifications.clean();
 
       if (!response.ok) {

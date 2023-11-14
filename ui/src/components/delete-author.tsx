@@ -2,6 +2,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconX } from "@tabler/icons-react";
+import { deleteAuthor } from "../controllers/author";
 
 export function DeleteAuthor({ id, refetch }: { id: number; refetch: any }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -14,14 +15,7 @@ export function DeleteAuthor({ id, refetch }: { id: number; refetch: any }) {
         loading: true,
       });
 
-      const response = await fetch(
-        `http://${import.meta.env.VITE_API_HOST}:${
-          import.meta.env.VITE_API_PORT
-        }/authors/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await deleteAuthor(id);
       notifications.clean();
 
       if (!response.ok) {

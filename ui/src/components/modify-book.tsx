@@ -6,6 +6,7 @@ import { IAuthor } from "../types";
 import { links } from "../routes/api-routes";
 import { useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
+import { updateBook } from "../controllers/book";
 
 const fetchAuthors = async () => {
   const response = await fetch(
@@ -65,21 +66,7 @@ export function ModifyBook({
         loading: true,
       });
 
-      const response = await fetch(
-        `http://${import.meta.env.VITE_API_HOST}:${
-          import.meta.env.VITE_API_PORT
-        }${links.getBooks}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id,
-            ...values,
-          }),
-        }
-      );
+      const response = await updateBook(id, values);
 
       notifications.clean();
       if (!response.ok) {
@@ -97,6 +84,7 @@ export function ModifyBook({
           color: "green",
           autoClose: 3000,
         });
+        close();
       }
     } catch (error) {
       notifications.show({

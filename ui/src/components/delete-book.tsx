@@ -2,6 +2,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconX } from "@tabler/icons-react";
+import { deleteBook } from "../controllers/book";
 
 export function DeleteBook({ id, refetch }: { id: number; refetch: any }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -14,14 +15,7 @@ export function DeleteBook({ id, refetch }: { id: number; refetch: any }) {
         loading: true,
       });
 
-      const response = await fetch(
-        `http://${import.meta.env.VITE_API_HOST}:${
-          import.meta.env.VITE_API_PORT
-        }/books/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await deleteBook(id);
       notifications.clean();
 
       if (!response.ok) {
