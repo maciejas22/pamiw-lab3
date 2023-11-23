@@ -1,1 +1,2 @@
 zmiany z feature-B
+featrue-A
