@@ -1,1 +1,4 @@
+zmiany z feature-B
 featrue-A
+
+jakies zmiany z mastera
